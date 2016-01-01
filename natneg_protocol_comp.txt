@@ -1,0 +1,45 @@
+Protocol anaylsis: Natneg1 vs Natneg2
+
+Natneg-Init (0x00):
+
+MC2-PS2 [P2P-Connect] (Client)
+FD:FC:1E:66:6A:B2:01:00:93:89:37:86:00:00:01;
+|header----------|--|--|cookie-----|--|--|--| <- use default port
+        protocol--^   ^-cmd     seq-^   ^-clienttype (guest!)                                        
+                                        
+SWBF2-PC CS-Connect (Client)
+FD:FC:1E:66:6A:B2:02:00:00:00:2C:E6:00:01:01:C0:A8:B2:23:00:00:73:77:62:66:72:6F:6E:74:32:70:63:00;
+?  ?    f  j  ?             ,  ?         ?  ?  ?  #        s  w  b  f  r  o  n  t  2  p  c  
+|header----------|--|--|cookie-----|--|--|--|localip----|port-|gamename------------------------|--| 
+        protocol--^   ^-cmd     seq-^   ^-clienttype                                             ^-end of string
+        
+Note: swbf2 will send another packet containing the actual localport even though usegameport is set to true.
+
+Raw PCAP-Dump [MC2-PS2]:
+fd:fc:1e:66:6a:b2:01:00:93:89:37:86:00:00:01;
+fd:fc:1e:66:6a:b2:01:00:93:89:37:86:01:00:01;
+fd:fc:1e:66:6a:b2:01:00:93:89:37:86:02:00:01;
+
+Note: v1 doesn't seem to send any address / port info at all
+      -> useing udp-header to guess the port
+
+|-MC2-P2P-------------------------------------------------->>
+Note: host starts a GUEST session which is kinda strange
+      -> Host Session is probably created by Remote Peer;
+      -> Host probably transmits Natneg-forwards
+         since there's no additional MS-Traffic
+|----------------------------------------------------------<<
+
+Summary:
+ - no localip
+ - no port info
+ - no gamename
+ - no end-byte
+ 
+Possible Response-packet:
+FD:FC:1E:66:6A:B2:01:01:93:89:37:86:00:00:FF:FF:6D:16:B5:7D:EA;
+|header----------|--|--|cookie-----|--|--|end-----------------|
+        protocol--^   ^-cmd     seq-^   ^-clienttype     
+
+Note: Localport, gamename and localip are not used at all when connecting the peers
+      -> may be ignored

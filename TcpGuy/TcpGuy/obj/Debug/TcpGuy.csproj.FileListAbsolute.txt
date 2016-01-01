@@ -1,0 +1,11 @@
+C:\Users\Jan\Documents\Visual Studio 2013\Projects\RemoteServer C#\TcpGuy\TcpGuy\bin\Debug\TcpGuy.exe.config
+C:\Users\Jan\Documents\Visual Studio 2013\Projects\RemoteServer C#\TcpGuy\TcpGuy\bin\Debug\TcpGuy.exe
+C:\Users\Jan\Documents\Visual Studio 2013\Projects\RemoteServer C#\TcpGuy\TcpGuy\bin\Debug\TcpGuy.pdb
+C:\Users\Jan\Documents\Visual Studio 2013\Projects\RemoteServer C#\TcpGuy\TcpGuy\obj\Debug\TcpGuy.exe
+C:\Users\Jan\Documents\Visual Studio 2013\Projects\RemoteServer C#\TcpGuy\TcpGuy\obj\Debug\TcpGuy.pdb
+C:\Users\Jan\Documents\GamespyMasterServer\extras\TcpGuy\TcpGuy\bin\Debug\TcpGuy.exe.config
+C:\Users\Jan\Documents\GamespyMasterServer\extras\TcpGuy\TcpGuy\obj\Debug\TcpGuy.exe
+C:\Users\Jan\Documents\GamespyMasterServer\extras\TcpGuy\TcpGuy\obj\Debug\TcpGuy.pdb
+C:\Users\Jan\Documents\GamespyMasterServer\extras\TcpGuy\TcpGuy\bin\Debug\TcpGuy.exe
+C:\Users\Jan\Documents\GamespyMasterServer\extras\TcpGuy\TcpGuy\bin\Debug\TcpGuy.pdb
+C:\Users\Jan\Documents\GamespyMasterServer\extras\TcpGuy\TcpGuy\obj\Debug\TcpGuy.csprojResolveAssemblyReference.cache

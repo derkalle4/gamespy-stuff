@@ -1,0 +1,26 @@
+Lokale IP: 10.10.10.252
+Host-IP: 69.10.30.242
+
+ip.addr == 10.10.10.252 && tcp.port == 29900
+
+Client klickt auf "registrieren"
+Server: \lc\1\challenge\FPHZLVNZLH\id\1\final\
+Client: \newuser\\email\kalle21423@kandru.de\nick\kalle21423\passwordenc\VJOBn0q1gg__\productid\10619\gamename\swbfront2pc\namespaceid\0\uniquenick\\id\1\final\
+Server: \nur\\userid\448960642\profileid\481189202\id\1\final\
+
+LOGIN
+
+Client: \login\\challenge\i24z63YaWc2fWjeJuJm6Cbu1d7bcc4RY\user\kalle21423@kalle21423@kandru.de\userid\448960642\profileid\481189202\response\37d6c2ba4f73ed3258ff95557b0a3058\port\-15425\productid\10619\gamename\swbfront2pc\namespaceid\0\id\1\final\
+
+BEI FALSCHEM LOGIN:
+\error\\err\258\fatal\\errmsg\The nickname provided is incorrect.\id\1\final\
+
+BEI RICHTIGEM LOGIN:
+Server: \lc\2\sesskey\8941387\proof\c097afd2f70d123a8308959c0bc77abd\userid\448960642\profileid\481189202\uniquenick\\lt\hcMA7YA3IkQa7eGPA[78Xr__\id\1\final\
+
+Client: \status\1\sesskey\8941387\statstring\Online\locstring\swbfront2pc\final\
+
+LOGOUT
+
+Client:
+\logout\\sesskey\8941387\final\

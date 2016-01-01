@@ -1,0 +1,272 @@
+GS Peerchat Protocol Analysis
+
+Async by Client:
+
+CRYPT
+CRYPT des <version(%d)> <gamename(%s)>
+  -> :s 705 * <16bit RX key> <16bit TX key>
+
+USRIP
+USRIP
+  -> :s 302  :=+@<ip-address(%d.%d.%d.%d)>
+
+USER
+USER <username> 127.0.0.1 <servername> <connection-name>
+?
+
+LOGINPREAUTH
+LOGINPREAUTH <authtoken> <partnerchallenge>
+?
+
+LOGIN
+1) LOGIN <namespaceID> <uniquenick> <pwd-hash>
+2) LOGIN <namespaceID> * <pwd-hash> :<nickname>@<e-mail>
+  ->:s 707 <userid> <profileid> [ok]
+  ->:s 708                      [fail]
+  
+NICK
+NICK <nickname>
+?
+
+REGISTERNICK
+REGISTERNICK <namespaceID> <uniquenick> <cd-key>
+
+QUIT
+QUIT :Later!
+QUIT :Later!
+
+MODE
+1)  MODE <nickname> +q
+2)  MODE <nickname> -q
+3)  MODE <channel> +k <password>
+4)  MODE <channel> -k <password>
+5)  MODE <channel> +l <limit>
+6)  MODE <channel> -l
+7)  MODE <channel> +b
+8)  MODE <channel> +b <ban>
+9)  MODE <channel> -b <ban>
+10) MODE <channel> <sign>o <user>
+11) MODE <channel> <sign>v <user>
+?
+
+CDKEY
+CDKEY <key>
+  -> :s 706 <state> :<message> [fail: 0,"Failed", ok: 1,"Authenticated"] 
+
+LIST
+LIST <filter>
+?
+
+LISTLIMIT
+LISTLIMIT <max-channels> <filter>
+?
+
+JOIN
+JOIN <channel> <pwd>
+?
+
+PART
+PART <channel> <reason>
+?
+
+PRIVMSG
+1) PRIVMSG <channel> :<msg>
+2) PRIVMSG <channel> :\001ACTION <message>\001
+3) PRIVMSG <user> :<msg>
+4) PRIVMSG <user> :\001ACTION <message>\001
+?
+
+NOTICE
+1) NOTICE <channel> :<message>
+2) NOTICE <channel> :<message>
+3) NOTICE <user> :<message>
+4) NOTICE <user> :<message>
+?
+
+UTM
+1) UTM <channel> :<message>
+2) UTM <user> :<message>
+?
+
+ATM
+1) ATM <channel> :<message>
+2) ATM <user> :<message>
+?
+
+
+TOPIC
+1) TOPIC <channel> :<topic>
+2) TOPIC <channel>
+?
+
+SETGROUP
+SETGROUP <channel> <group>
+?
+
+NAMES
+NAMES <channel>
+?
+
+WHOIS
+WHOIS <user>
+?
+
+WHO 
+WHO <nickname>
+  ->:s 352 <?> <channel> <user> <address> <nick> <mode> <?> <?>
+    [mode = "@"->"op" || "+"->"voice"] 
+
+WHO
+WHO <channel>
+?
+
+INVITE
+INVITE <user> <channel>
+?
+
+KICK
+KICK <channel> <user> <reason>
+?
+
+GETUDPRELAY
+GETUDPRELAY <channel>
+?
+
+SETKEY
+SETKEY :<key>
+?
+
+GETKEY
+GETKEY <target> <cookie> 0 :<key>
+?
+
+SETCHANKEY
+SETCHANKEY <channel> :<key>
+?
+
+SETCKEY
+SETCKEY <channel> <user> :<key>
+?
+
+GETCHANKEY
+GETCHANKEY <channel> <cookie> 0 :<?>
+?
+
+GETCKEY
+GETCKEY <channel> <user> 0 :<?>
+?
+
+
+Server -> Client
+
+numeric:
+
+WELCOME
+:s 001 <message>
+:s 002 <line 2>
+
+USRIP
+ :s 302  :=+@<ip-address(%d.%d.%d.%d)>
+
+MOTD
+
+--------------------------------------------------------------------------------
+PeerChat SDK RE:
+
+state = ciConnecting:
+
+  -> CRYPT des <version> <gamename>
+  <- :s 705 * <RX-key> <TX-key>
+  
+  -> USRIP 
+  <- :s 302 :=+@<address>
+  
+  - sendNickAndUser();
+  
+     - ciSendUser();   //no delay here
+        -> USER <user> 127.0.0.1 <server> <name>
+          
+     - ciSendNick();
+        - type == CIProfileLogin):
+           -> NICK <nick>
+        - type != CIProfileLogin:
+           -> NICK *     //expects the server to set unique nick 
+     
+Note: procedure will halt and timeout if no response is received (unless specified)!
+
+state = ciConnected
+  - ciSocketRecv();
+
+
+
+state = ciDisconnected
+  - shutdown client 
+  
+--------------------------------------------------------------------------------
+Command parsing algorithm :
+
+if data[0] == 0
+  return;
+  
+remove any \r or \n at the front
+go to next \r || \n || \0
+
+-> stream-like parsing with custom CRLF seek
+
+if message == NULL
+  return;
+
+message = message + \0;
+skip every \r or \n at the beginning
+
+//at this point the message is the actual "message" sent by the server
+//the messy splitting is already done -> crypting the crlf is horrible protocol design..
+-------------------------------
+
+message parsing:
+
+if message[0] == ":"
+  :<server> <middle> <params> 
+
+server and middle are terminated by nullchar or space
+multiple nullchars / spaces will be skipped
+
+params are terminated by nullchar.
+
+ciParseUser():
+
+//format: <nickname>!username@host
+
+read nick, terminated by !
+
+if next char != \0
+  read username, terminated by @
+  read host, terminated by \0
+  
+if nick
+  packet.nick = nick
+else
+  packet.nick = null
+
+if user
+  packet.host = host
+else
+  packet.user = null
+  
+  
+if host
+  packet.host = host
+else
+  packet.host = null
+
+else
+  continue with generic IRC processing
+
+
+
+
+
+
+
+
+

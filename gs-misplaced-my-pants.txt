@@ -1,0 +1,8 @@
+fe:fd:02:58:4b:ad:94: | 49:20:68:61:76:65:20:6d:69:73:70:6c:61:63:65:64:20:6d:79:20:70:61:6e:74:73:2e
+?   ?  ?  X  K  ?  ?  | I     h  a  v  e     m  i  s  p  l  a  c  e  d     m  y     p  a  n  t  s  .
+|-----|-|-------------|-Content----->
+(1)   (2) (3)
+
+(1) Service ID [Masterserver/UDP]
+(2) 02 - Offenbar CMD-ID
+(3) Serverid

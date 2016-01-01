@@ -1,0 +1,151 @@
+UDP-Packet struct:
+--------------------------------------------------------------------------------
+1)
+FD:FC:1E:66:6A:B2:02:00:00:00:2C:E6:00:01:01:C0:A8:B2:23:00:00:73:77:62:66:72:6F:6E:74:32:70:63:00:
+?  ?    f  j  ?             ,  ?         ?  ?  ?  #        s  w  b  f  r  o  n  t  2  p  c     
+|header-------------|cmd------|cook-|Command-|localip---|-port|-gamename---------------------------|
+
+2)
+FD:FC:1E:66:6A:B2:02:00:00:00:2C:E6:01:01:01:C0:A8:B2:23:00:00:73:77:62:66:72:6F:6E:74:32:70:63:00:
+?  ?    f  j  ?             ,  ?        ?  ?  ?  #        s  w  b  f  r  o  n  t  2  p  c     
+|header-------------|cmd------|cook-|Command-|localip---|-port|-gamename---------------------------|
+
+3)
+(natneg2)
+FD:FC:1E:66:6A:B2:02:00:00:00:2C:E6:02:01:01:C0:A8:B2:23:0E:4B:73:77:62:66:72:6F:6E:74:32:70:63:00:
+?  ?    f  j  ?             ,  ?        ?  ?  ?  #    K  s  w  b  f  r  o  n  t  2  p  c     
+|header-------------|cmd------|cook-|Command-|localip---|-port|-gamename---------------------------|
+
+cmd = 0
+xFD:xFC: Service ID GS NATNEG
+--------------------------------------------------------------------------------
+
+1)
+[69.10.30.254] (natneg1)
+FD:FC:1E:66:6A:B2:02:01:00:00:2C:E6:00:01:FF:FF:6D:16:B5:7D:EA
+?  ?    f  j  ?            ,  ?       ?  ?  m    ?  }  ?  
+|header-------------|cmd-----|cook-|Cmd--|-------------------|
+
+2)
+[69.10.30.253] (natneg2)
+FD:FC:1E:66:6A:B2:02:01:00:00:2C:E6:02:01:FF:FF:6D:16:B5:7D:EA
+?  ?    f  j  ?            ,  ?      ?  ?  m    ?  }  ?  
+|header-------------|cmd-----|cook-|Cmd--|-------------------|
+
+3)
+[69.10.30.254] (natneg1)
+FD:FC:1E:66:6A:B2:02:01:00:00:2C:E6:01:01:FF:FF:6D:16:B5:7D:EA:
+?  ?    f  j  ?            ,  ?      ?  ?  m    ?  }  ?  
+|header-------------|cmd-----|cook-|Cmd--|-------------------|
+
+Cmd: gleiche Befehlsfolge wie oben
+cmd = 1
+
+Pakete gehören zusammen (1,1; 2,2...)!
+Paket (1): sport/ dport für res dport = 3658+!
+
+--------------------------------------------------------------------------------
+
+[Hier scheint die Anfrage zum Server durchzulaufen]
+
+--------------------------------------------------------------------------------
+
+4)
+[69.10.30.254] (natneg1)
+FD:FC:1E:66:6A:B2:02:01:00:00:2C:E6:01:01:FF:FF:6D:16:B5:7D:EA:
+?  ?    f  j  ?            ,  ?      ?  ?  m    ?  }  ?  
+|header-------------|cmd-----|cook-|Cmd--|-------------------|
+
+5)
+[69.10.30.254] (natneg1)
+FD:FC:1E:66:6A:B2:02:05:00:00:2C:E6:50:79:1F:C0:0E:4A:42:00:
+?  ?    f  j  ?            ,  ?  P  y    ?    J  B     
+|header-------------|cmd-----|cook-|dip--------|dport|-----|
+
+
+CMD-2
+->Befehlsfolge 00 01 01 (natneg1)
+->Befehlsfolge 02 (natneg2)
+
+CMD-1
+->Befehlsfolge 01 01 01 05 (natneg1)
+->Befehlsfolge 01 (natneg2)
+
+6)
+(Client->Server)
+FD:FC:1E:66:6A:B2:02:06:00:00:2C:E6:FC:01:00:00:58:F9:3E:02:01:
+?  ?    f  j  ?            ,  ?  ?          X  ?  >      
+|header-------------|cmd-----|cook-|Cmd--|-------------------|
+
+fd:fc:1e:66:6a:b2:02:06:00:00:2c:e6:fc:01:00:00:58:f9:3e:02:01
+253:252:030:102:106:178:002:006:000:000:044:230:252:001:000:000:088:249:062:002:001:
+?   ?      f   j   ?                 ,   ?   ?              X   ?   >         
+
+--------------------------------------------------------------------------------
+Paket besteht aus:
+Header {FD:FC:1E:66:6A:B2:02}
+Cookie {%b:%b}
+Command1 {%b,%b,%b}
+Command2 {%b,%b}
+localip {%b,%b,%b}
+localport {%b,%b} (UInt16 invert.)
+gamename + 0
+
+Connect-anfrage an natneg-Server:
+
+1) command = x00 x01 x01
+   port = x00 x00
+
+2) command = x01 x01 x01
+   port = x00 x00
+   
+3) command = x02 x01 x01
+   port = port(unit16)
+--------------------------------------------------------------------------------
+
+TCP Packet struct:
+
+localhost@tcpd -> 69.10.30.247 
+00:13:02:50:79:1f:c0:0e:4a
+000:019:002:080:121:031:192:014:074:
+          P   y      ?      J 
+|-----------|dip-----------|dport--|
+Frage nach connect und fordere Cookie an
+
+
+69.10.30.247 -> localhost@tcpd 
+fd:fc:1e:66:6a:b2:00:00:2c:e6
+253:252:030:102:106:178:000:000:044:230
+?   ?      f   j   ?           ,   ?  
+|header----------------|        |------|
+                                 ^cookie
+Antwort, liefert cookie
+
+x00:x13 -> Service-ID GS-Master
+Header = {FD:FC:1E:66:6A:B2:02}
+--------------------------------------------------------------------------------
+
+MASTER-Sim:
+fe:fd:                   GS_SERVICE_MASTER_PREFIX
+06:                      GS_MASTER_CMD_MESSAGE
+fb:f3:6a:66:             CLIENT_UUID
+0c:d8:2e:24:             TMP
+
+fd:fc:                   GS_SERVICE_NATNEG_PREFIX
+1e:66:6a:b2              GS_NATNEG_HEADER
+00:00:2c:9c              PEERID
+
+
+CONNECT_ACK:
+fd:fc:
+1e:66:6a:b2:
+02:
+06:
+00:00:2f:7d:
+bc:
+00:    eply flag / client index
+76:02:
+01:00:00:00:d4
+
+FD:FC:1E:66:6A:B2:2:6:0:0:1D:BE:28: ->1:0:0:58:F9:3E:2:1:
+FD:FC:1E:66:6A:B2:2:6:0:0:1D:BE:BC: ->0:76:2:1:0:0:0:D4
